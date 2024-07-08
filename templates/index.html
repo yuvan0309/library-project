@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Haven</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="../static/script.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .book {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .book h4 {
+            margin: 0 0 10px 0;
+        }
+        .book p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Book Haven</h1>
+        <h2>Library Management System</h2>
+        <div class="content">
+            <div class="section">
+                <h3>Get All Books</h3>
+                <button onclick="fetchBooks()">Fetch Books</button>
+                <div id="bookList"></div>
+            </div>
+            <div class="section">
+                <h3>Add a New Book</h3>
+                <form id="addBookForm">
+                    <input type="text" id="title" placeholder="Title" required>
+                    <input type="text" id="author" placeholder="Author" required>
+                    <input type="number" id="year" placeholder="Year" required>
+                    <input type="text" id="isbn" placeholder="ISBN" required>
+                    <button type="submit">Add Book</button>
+                </form>
+            </div>
+            <div class="section">
+                <h3>Update a Book</h3>
+                <form id="updateBookForm">
+                    <input type="number" id="updateId" placeholder="Book ID" required>
+                    <input type="text" id="updateTitle" placeholder="New Title">
+                    <input type="text" id="updateAuthor" placeholder="New Author">
+                    <input type="number" id="updateYear" placeholder="New Year">
+                    <input type="text" id="updateIsbn" placeholder="New ISBN">
+                    <button type="submit">Update Book</button>
+                </form>
+            </div>
+            <div class="section">
+                <h3>Delete a Book</h3>
+                <form id="deleteBookForm">
+                    <input type="number" id="deleteId" placeholder="Book ID" required>
+                    <button type="submit">Delete Book</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>

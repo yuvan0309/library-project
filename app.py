@@ -14,7 +14,7 @@ def get_db_connection():
     )
 
 # Route for the homepage
-@app.route('/')
+@app.route('/') 
 def index():
     return render_template('index.html')
 
@@ -28,7 +28,6 @@ def get_books():
     cursor.close()
     conn.close()
     return jsonify(books)
-
 
 # Route to add a new book
 @app.route('/book', methods=['POST'])
@@ -59,6 +58,14 @@ def update_book(id):
 
     conn = get_db_connection()
     cursor = conn.cursor()
+    cursor.execute("SELECT * FROM books WHERE id = %s", (id,))
+    book = cursor.fetchone()
+    
+    if not book:
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Book not found'}), 404
+
     updates = []
     if title:
         updates.append(f"title = '{title}'")
@@ -80,6 +87,14 @@ def update_book(id):
 def delete_book(id):
     conn = get_db_connection()
     cursor = conn.cursor()
+    cursor.execute("SELECT * FROM books WHERE id = %s", (id,))
+    book = cursor.fetchone()
+    
+    if not book:
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Book not found'}), 404
+
     cursor.execute("DELETE FROM books WHERE id = %s", (id,))
     conn.commit()
     cursor.close()

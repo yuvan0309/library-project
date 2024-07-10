@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 bookElement.classList.add('book');
                 bookElement.innerHTML = `
                     <h4>${book.title}</h4>
+                    <p><strong>ID:</strong> ${book.id}</p>
                     <p><strong>Author:</strong> ${book.author}</p>
                     <p><strong>Year:</strong> ${book.year}</p>
                     <p><strong>ISBN:</strong> ${book.isbn}</p>
@@ -31,13 +32,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const isbn = document.getElementById('isbn').value;
 
         try {
-            await fetch('/book', {
+            const response = await fetch('/book', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, author, year, isbn })
             });
-            alert('Book added successfully');
+            const data = await response.json();
+            alert(data.message);
             document.getElementById('addBookForm').reset();
+            fetchBooks(); // Refresh the book list
         } catch (error) {
             console.error('Error adding book:', error);
         }
@@ -59,13 +62,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isbn) data.isbn = isbn;
 
         try {
-            await fetch(`/book/${id}`, {
+            const response = await fetch(`/book/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-            alert('Book updated successfully');
+            const responseData = await response.json();
+            alert(responseData.message);
             document.getElementById('updateBookForm').reset();
+            fetchBooks(); // Refresh the book list
         } catch (error) {
             console.error('Error updating book:', error);
         }
@@ -77,14 +82,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const id = document.getElementById('deleteId').value;
 
         try {
-            await fetch(`/book/${id}`, {
+            const response = await fetch(`/book/${id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }
             });
-            alert('Book deleted successfully');
+            if (response.status === 404) {
+                alert('Book not found');
+            } else {
+                const data = await response.json();
+                alert(data.message);
+            }
             document.getElementById('deleteBookForm').reset();
+            fetchBooks(); // Refresh the book list
         } catch (error) {
             console.error('Error deleting book:', error);
         }
     });
+
+    // Fetch books on initial load
+    fetchBooks();
 });
